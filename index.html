@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Günün Özel Fırsatı - Hemen Kontrol Et!</title>
+    <link href="https://googleapis.com" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #f4f6f9;
+            overflow-x: hidden;
+            padding: 20px;
+        }
+
+        /* Arka Plan Videosu Ayarları */
+        #bgVideo {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            object-fit: cover;
+            z-index: -2;
+            display: none; /* İlk başta gizli */
+        }
+
+        /* Videonun üzerine hafif karartma (Yazılar net okunsun diye) */
+        .video-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.35);
+            z-index: -1;
+            display: none;
+        }
+
+        /* İlk açılan sahte ekran */
+        .decoy-box {
+            background: white;
+            padding: 40px 30px;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            text-align: center;
+            max-width: 400px;
+            width: 100%;
+        }
+
+        .decoy-box h2 {
+            color: #2c3e50;
+            font-size: 22px;
+            margin-bottom: 12px;
+        }
+
+        .decoy-box p {
+            color: #7f8c8d;
+            font-size: 14px;
+            margin-bottom: 25px;
+            line-height: 1.5;
+        }
+
+        .decoy-btn {
+            background: #27ae60;
+            color: white;
+            border: none;
+            padding: 14px 28px;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: transform 0.2s, background 0.2s;
+            width: 100%;
+        }
+
+        .decoy-btn:hover {
+            background: #219150;
+            transform: scale(1.02);
+        }
+
+        /* Asıl Romantik Kart (Yarı saydam buzlu cam efekti) */
+        .love-card {
+            display: none;
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(8px);
+            padding: 40px 30px;
+            border-radius: 24px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+            text-align: center;
+            max-width: 550px;
+            width: 100%;
+            position: relative;
+            z-index: 10;
+            animation: fadeIn 1.2s ease forwards;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .heart-icon {
+            font-size: 50px;
+            color: #ff4757;
+            animation: heartbeat 1.2s infinite;
+            display: inline-block;
+            margin-bottom: 15px;
+        }
+
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+        }
+
+        .love-title {
+            font-family: 'Dancing Script', cursive;
+            font-size: 38px;
+            color: #ff4757;
+            margin-bottom: 20px;
+        }
+
+        .love-message {
+            color: #222;
+            font-size: 16px;
+            line-height: 1.8;
+            margin-bottom: 25px;
+            text-align: left;
+            white-space: pre-line;
+            font-weight: 400;
+        }
+
+        .signature {
+            font-family: 'Dancing Script', cursive;
+            font-size: 28px;
+            color: #ff4757;
+            text-align: right;
+            margin-top: 10px;
+        }
+
+        /* Uçuşan Kalpler Efekti */
+        .floating-heart {
+            position: fixed;
+            bottom: -20px;
+            font-size: 24px;
+            color: rgba(255, 255, 255, 0.9);
+            animation: floatUp 4s linear forwards;
+            pointer-events: none;
+            z-index: 5;
+        }
+
+        @keyframes floatUp {
+            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(-110vh) rotate(360deg); opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ARKA PLAN VİDEOSU -->
+    <video id="bgVideo" autoplay muted loop playsinline>
+        <!-- Klasördeki video dosyanın adı burada yazmalı -->
+        <source src="arka-plan.mp4" type="video/mp4">
+    </video>
+    <div class="video-overlay" id="videoOverlay"></div>
+
+    <!-- 1. AŞAMA: SAHTE EKRAN -->
+    <div class="decoy-box" id="decoyBox">
+        <h2>🎁 Tebrikler! Özel Bir Hediye Kazandınız</h2>
+        <p>Bugüne özel tanımlanan sürpriz ödülünüzü görüntülemek için aşağıdaki butona tıklayın.</p>
+        <button class="decoy-btn" onclick="revealSurprise()">Ödülü Görüntüle</button>
+    </div>
+
+    <!-- 2. AŞAMA: ROMANTİK MEKTUP -->
+    <div class="love-card" id="loveCard">
+        <div class="heart-icon">❤️</div>
+        <h1 class="love-title">İyi Ki Varsın Sevgilim...</h1>
+        
+        <div class="love-message">
+            Sana sıradan bir link göndermişim gibi görünse de, aslında sadece senin gülümsemeni görmek için küçük bir sürpriz hazırlamak istedim.
+
+            Hayatıma girdiğin günden beri her anım daha anlamlı, her günüm daha güzel. Seninle geçirdiğim her saniye benim için dünyadaki en büyük hediye.
+
+            Gülüşün hiç solmasın, seni her şeyden çok seviyorum!
+        </div>
+
+        <div class="signature">Seni Seven, [Senin Adın]</div>
+    </div>
+
+    <script>
+        function revealSurprise() {
+            // Sahte ekranı gizle
+            document.getElementById('decoyBox').style.display = 'none';
+            
+            // Videoyu ve karartma katmanını görünür yapıp oynat
+            const video = document.getElementById('bgVideo');
+            const overlay = document.getElementById('videoOverlay');
+            video.style.display = 'block';
+            overlay.style.display = 'block';
+            video.play();
+
+            // Sekme başlığını değiştir
+            document.title = "Sana Özel ❤️";
+            
+            // Romantik kartı göster
+            document.getElementById('loveCard').style.display = 'block';
+
+            // Uçuşan kalpleri başlat
+            setInterval(createHeart, 300);
+        }
+
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.classList.add('floating-heart');
+            heart.innerHTML = '❤️';
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.fontSize = (Math.random() * 20 + 15) + 'px';
+            heart.style.animationDuration = (Math.random() * 2 + 3) + 's';
+            
+            document.body.appendChild(heart);
+
+            setTimeout(() => {
+                heart.remove();
+            }, 5000);
+        }
+    </script>
+
+</body>
+</html>
